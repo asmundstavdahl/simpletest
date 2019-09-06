@@ -82,6 +82,8 @@ class SimpleTagBuilder
             'text'     => 'SimpleTextTag',
             'hidden'   => 'SimpleTextTag',
             'password' => 'SimpleTextTag',
+            'date'     => 'SimpleDateTag',
+            'time'     => 'SimpleTimeTag',
             'file'     => 'SimpleUploadTag'
         );
         if (array_key_exists($type, $map)) {
@@ -1238,6 +1240,66 @@ class SimpleCheckboxTag extends SimpleWidget
         }
 
         return false;
+    }
+}
+
+/**
+ * Date field.
+ */
+class SimpleDateTag extends SimpleTextTag
+{
+    /**
+     * Sets the current form element value.
+     *
+     * Date value must be empty or parseable by strtotime, e.g. 2019-09-06.
+     *
+     * @param string $value       New date value.
+     *
+     * @return bool            True if allowed.
+     */
+    public function setValue($value)
+    {
+        if (!empty($value)) {
+            $time = strtotime($value);
+
+            if ($time === false) {
+                return false;
+            } else {
+                $value = date("Y-m-d", $time);
+            }
+        }
+
+        return parent::setValue($value);
+    }
+}
+
+/**
+ * Time field.
+ */
+class SimpleTimeTag extends SimpleTextTag
+{
+    /**
+     * Sets the current form element value.
+     *
+     * Time value must be empty or parseable by strtotime, e.g. 23:59:59.
+     *
+     * @param string $value       New time value.
+     *
+     * @return bool            True if allowed.
+     */
+    public function setValue($value)
+    {
+        if (!empty($value)) {
+            $time = strtotime($value);
+
+            if ($time === false) {
+                return false;
+            } else {
+                $value = date("H:i:s", $time);
+            }
+        }
+
+        return parent::setValue($value);
     }
 }
 
