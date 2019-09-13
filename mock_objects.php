@@ -741,7 +741,9 @@ class SimpleMock
             trigger_error(
                 "Cannot $task as \$args parameter is not an array",
                 E_USER_ERROR);
+            return false;
         }
+        return true;
     }
 
     /**
@@ -756,7 +758,9 @@ class SimpleMock
             trigger_error(
                     "Cannot $task as no ${method}() in class " . get_class($this),
                     E_USER_ERROR);
+            return false;
         }
+        return true;
     }
 
     /**
@@ -942,8 +946,12 @@ class SimpleMock
      */
     public function expect($method, $args, $message = '%s')
     {
-        $this->dieOnNoMethod($method, 'set expected arguments');
-        $this->checkArgumentsIsArray($args, 'set expected arguments');
+        $ok = true;
+        $ok = $ok && $this->dieOnNoMethod($method, 'set expected arguments');
+        $ok = $ok && $this->checkArgumentsIsArray($args, 'set expected arguments');
+        if (!$ok) {
+            return;
+        }
         $this->expectations->expectArguments($method, $args, $message);
         $args = $this->replaceWildcards($args);
         $message .= Mock::getExpectationLine();
