@@ -239,6 +239,9 @@ class TestOfParsedPageAccess extends UnitTestCase
 
 class TestOfBrowserNavigation extends UnitTestCase
 {
+    /**
+     * @return SimpleBrowser
+     */
     public function createBrowser($agent, $page)
     {
         $browser = new MockParseSimpleBrowser();
@@ -283,7 +286,7 @@ class TestOfBrowserNavigation extends UnitTestCase
         $browser->delete('http://this.com/delete.req');
         $browser->head('http://this.com/head.req');
     }
-    
+
     public function testClickLinkRequestsPage()
     {
         $agent = new MockSimpleUserAgent();
@@ -399,6 +402,7 @@ class TestOfBrowserNavigation extends UnitTestCase
 
         $page = new MockSimplePage();
         $page->setReturnValue('getUrlById', false);
+        $page->setReturnValue('getUrlsByLabel', array());
 
         $browser = $this->createBrowser($agent, $page);
         $browser->get('http://this.com/page.html');
