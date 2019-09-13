@@ -30,7 +30,11 @@ class TestOfMockInterfaces extends UnitTestCase
     {
         $mock = new MockDummyInterface();
         $this->expectError();
-        $mock->anotherMethod();
+        try {
+            $mock->anotherMethod();
+        } catch (Error $e) {
+            trigger_error($e->getMessage());
+        }
     }
 
     public function testCannotPartiallyMockAnInterface()
